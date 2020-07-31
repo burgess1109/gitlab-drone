@@ -1,0 +1,6 @@
+.env
+.idea
+.drone-server/data
+.gitlab/config
+.gitlab/data
+.gitlab/logs
