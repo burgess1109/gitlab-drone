@@ -23,13 +23,22 @@ services:
     volumes:
       - './drone-server/data:/data'
     environment:
-      DRONE_GITLAB_SERVER: gitlab-web:8929
+      DRONE_GITLAB_SERVER: ${DRONE_GITLAB_SERVER}
       DRONE_GITLAB_CLIENT_ID: ${DRONE_GITLAB_CLIENT_ID}
       DRONE_GITLAB_CLIENT_SECRET: ${DRONE_GITLAB_CLIENT_SECRET}
       DRONE_RPC_SECRET: ${DRONE_RPC_SECRET}
       DRONE_SERVER_HOST: ${DRONE_SERVER_HOST}
       DRONE_SERVER_PROTO: ${DRONE_SERVER_PROTO}
-    extra_hosts:
-      - 'drone.local.com:<host ip>'
-  #drone-runner:
-    #image: drone/drone-runner-docker:1
+  drone-runner:
+    image: drone/drone-runner-docker:1
+    restart: always
+    ports:
+      - 3000:3000
+    volumes:
+      - '/var/run/docker.sock:/var/run/docker.sock'
+    environment:
+      DRONE_RPC_PROTO: ${DRONE_SERVER_PROTO}
+      DRONE_RPC_HOST: ${DRONE_SERVER_HOST}
+      DRONE_RPC_SECRET: ${DRONE_RPC_SECRET}
+      DRONE_RUNNER_CAPACITY: 2
+
